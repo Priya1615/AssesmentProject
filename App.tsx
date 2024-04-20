@@ -9,7 +9,6 @@ import {firebaseConfig} from './app/Utils/FirebaseHelper';
 
 function App() {
   React.useEffect(() => {
-    console.log('getApp', getApp());
     if (!getApp()) {
       firebase.initializeApp(firebaseConfig);
     }

@@ -41,14 +41,12 @@ const SignUpScreen: FC<Props> = props => {
  const signUpAction=async()=>{
    setLoading(true);
    const firebaseLoginResponse:any=await handleSignUp(name,email,password)
-   console.log('response from fb',firebaseLoginResponse)
   if( firebaseLoginResponse.user){
     let userCred= {
       email:firebaseLoginResponse.user.email,
       uid:firebaseLoginResponse.user.uid,
       displayName:name
     }
-    console.log('dn',userCred)
     await storeData('user',userCred)
     props.navigation.navigate('Home', { screen: 'HomeScreen', params: { uid: userCred.uid } });
    }

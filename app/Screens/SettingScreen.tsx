@@ -44,7 +44,6 @@ const SettingScreen: FC<Props> = props => {
   };
   const getUser = async () => {
     const user: User = await getData('user');
-    console.log('user get', user);
     setUser(user);
   };
   useEffect(() => {

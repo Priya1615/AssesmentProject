@@ -25,7 +25,6 @@ export const handleSignUp = async (
     });
     return userCredential;
   } catch (error) {
-    console.log(error);
     return {err: error};
   }
 };
@@ -34,7 +33,6 @@ export const handleLogin = async (email: string, password: string) => {
     return await auth().signInWithEmailAndPassword(email, password);
     // Handle successful login
   } catch (err) {
-    console.log(err);
     return {err: err};
   }
 };
@@ -74,7 +72,6 @@ export const loadTodos = async (uid: string) => {
           ...doc.data(),
         });
       });
-      console.log('todo', todosList);
       return todosList;
     } catch (error) {
       console.error('Error loading todos: ', error);

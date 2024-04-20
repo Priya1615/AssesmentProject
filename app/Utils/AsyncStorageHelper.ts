@@ -25,6 +25,5 @@ export const storeData = async (key:string,value:object) => {
       return false
       // clear error
     }
-  
-    console.log('Done.')
+
   }
