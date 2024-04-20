@@ -12,6 +12,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator
 } from 'react-native';
 import {Colors} from '../Assets/Colors';
 import Assets from '../Assets';
@@ -32,15 +33,18 @@ const SettingScreen: FC<Props> = props => {
   const [name, setName] = useState('');
   const [password, setpassword] = useState('');
   const [secureText, setsecureText] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User>({displayName: '', email: '', uid: ''});
 
   const onLogoutPress = async () => {
+    setLoading(true)
     await clearAll().then(resp => {
        props.navigation.reset({
             index: 0,
             routes: [{ name: 'LoginScreen', params: { } }],
           });
     });
+    setLoading(false)
   };
   const getUser = async () => {
     const user: User = await getData('user');
@@ -82,7 +86,10 @@ const SettingScreen: FC<Props> = props => {
           <TouchableOpacity
             onPress={() => onLogoutPress()}
             style={styles.buttonView}>
-            <Text style={styles.buttonText}>Logout</Text>
+               {loading ? (
+              <ActivityIndicator size={'small'} color={'#FFF'} />
+            ) : (
+            <Text style={styles.buttonText}>Logout</Text>)}
           </TouchableOpacity>
         </View>
       </ScrollView>
