@@ -12,18 +12,43 @@ import TaskCard from '../Components/TaskCard';
 import { loadTodos } from '../../app/Utils/FirebaseHelper';
 import {TaskData} from '../Components/TaskCard'
 import { useFocusEffect } from '@react-navigation/native';
-import { DrawerActions } from '@react-navigation/native';
+import ToolTip from '../Components/ToolTip'
+import Assets from '../Assets';
 interface Props {}
 
 const HomeScreen: FC<Props> = (props:any) => {
    const uid=props.route.params.uid
-  console.log('props',props.route)
+  const [tipView,setTipView]=useState(false)
   const [taskData,setTaskData]=useState<TaskData[]>([])
+
   useFocusEffect(
     React.useCallback(() => {
       loadAllToDo()
     }, [])
   );
+  useEffect(()=>{
+    props.navigation.setOptions(
+      {
+        title: 'Home',
+        headerRight: () => (
+          <TouchableOpacity onPress={() => setTipView(prev=>!prev)}>
+            <Image
+              source={Assets.UserProfile}
+              style={{ width: 40, height: 40, borderRadius:20,marginRight:10 }}
+            />
+          </TouchableOpacity>
+        ),
+        headerStyle: {
+          backgroundColor:'#0178BD',
+        },
+        headerTintColor: '#fff',
+        // headerTitleStyle: {
+        //   fontWeight: 'bold',
+        // },
+
+      }
+    )
+  },[])
 
   const loadAllToDo=async()=>{
   const todoList:TaskData[]= await loadTodos(uid);
@@ -32,6 +57,7 @@ const HomeScreen: FC<Props> = (props:any) => {
   return (
     <View
       style={styles.mainView}>
+        {tipView?<ToolTip navigation={props.navigation}/>:null}
       <ScrollView
         style={{width: '100%', marginTop: 20}}
         showsVerticalScrollIndicator={false}>
@@ -53,6 +79,7 @@ const HomeScreen: FC<Props> = (props:any) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   mainView:{
     flex: 1,
