@@ -5,6 +5,7 @@ const Assets = {
   img_hideeye:require('../Assets/Images/img_hideeye.png'),
   Eye: require('./Images/Eye1.png'),
   delete:require('./Images/delete_gray.png'),
+  cross:require('./Images/cross.png'),
 };
 
 export default Assets;
