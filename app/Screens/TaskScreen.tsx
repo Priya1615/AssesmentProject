@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -15,52 +15,123 @@ import {
 import {Colors} from '../Assets/Colors';
 import Assets from '../Assets';
 import {FontConstants} from '../Assets/FontConstants';
-import TaskCard from '../Components/TaskCard';
+import TaskCard, {TaskData} from '../Components/TaskCard';
 import SummaryCard from '../Components/SummaryCard';
+import {
+  addTodo,
+  deleteTodo,
+  loadTodos,
+  updateTodo,
+} from '../../app/Utils/FirebaseHelper';
+import {useFocusEffect} from '@react-navigation/native';
+import {User} from './SettingScreen';
+import {getData} from '../../app/Utils/AsyncStorageHelper';
+import ModalView from '../Components/ModalView';
 
 interface Props {
   navigation: any;
 }
 
 const TaskScreen: FC<Props> = props => {
-  const [selectedType, setselectedType] = useState('AllTask');
-  const taskData = [
-    {
-      title: 'Document Signing',
-      id: '1',
-      des: 'Document signing with Jhon Doe',
-      status: 'Completed',
-    },
-    {
-      title: 'Document Signing',
-      id: '2',
-      des: 'Document signing with Jhon Doe',
-      status: 'Due',
-    },
-  ];
+  const [selectedType, setselectedType] = useState('all');
+  const [uid, setUid] = useState('');
+  const [taskData, setTaskData] = useState<TaskData[]>([]);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [showmodal, setShowmodal] = useState(false);
+  const previewData =
+    selectedType == 'all'
+      ? taskData
+      : selectedType == 'due'
+      ? taskData.filter(item => item.stat == 'Due')
+      : selectedType == 'complete'
+      ? taskData.filter(item => item.stat == 'Complete')
+      : [];
+  useEffect(() => {
+    getUser();
+  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      loadAllToDo();
+    }, [uid]),
+  );
+  const getUser = async () => {
+    const user: User = await getData('user');
+    setUid(user.uid);
+  };
+
+  const loadAllToDo = async () => {
+    const todoList: TaskData[] = await loadTodos(uid);
+    setTaskData(todoList);
+  };
+  const onComplete = async (id: string) => {
+    await updateTodo(uid, id, 'Complete');
+    loadAllToDo();
+  };
+  const onDelete = async (id: string) => {
+    await deleteTodo(uid, id);
+    loadAllToDo();
+  };
+  const addToDo = async () => {
+    await addTodo(uid, title, description, 'Due');
+    loadAllToDo();
+    setShowmodal(false);
+    setTitle('');
+    setDescription('');
+  };
   return (
     <View style={styles.parentView}>
       <View style={styles.summaryDiv}>
+        <ModalView
+          title={title}
+          showmodal={showmodal}
+          description={description}
+          setTitle={(t: string) => setTitle(t)}
+          setDescription={(t: string) => {
+            setDescription(t);
+          }}
+          addTask={() => {
+            addToDo();
+          }}
+          setShowmodal={(b: boolean) => setShowmodal(b)}
+        />
         <SummaryCard
           color={'#86279B'}
           title={'All Task'}
-          value={'10'}
+          value={taskData ? taskData.length : 0}
           colorbackground={'#F4EBF6'}
+          onPress={() => {
+            setselectedType('all');
+          }}
         />
         <SummaryCard
           color={'#009589'}
-          title={'Comppleted'}
-          value={'5'}
+          title={'Completed'}
+          value={
+            taskData ? taskData.filter(item => item.stat != 'Due').length : 0
+          }
           colorbackground={'#EAF6F5'}
+          onPress={() => {
+            setselectedType('complete');
+          }}
         />
         <SummaryCard
           color={'#FF0000'}
           title={'Due'}
-          value={'5'}
+          value={
+            taskData ? taskData.filter(item => item.stat == 'Due').length : 0
+          }
           colorbackground={'rgba(255, 232, 232, 1)'}
+          onPress={() => {
+            setselectedType('due');
+          }}
         />
       </View>
-      <TouchableOpacity style={styles.addTaskView}>
+      <TouchableOpacity
+        onPress={() => {
+          setShowmodal(true);
+        }}
+        style={styles.addTaskView}>
         <Text style={styles.addTaskText}>Add Task</Text>
       </TouchableOpacity>
 
@@ -68,15 +139,25 @@ const TaskScreen: FC<Props> = props => {
         style={{width: '100%', marginTop: 20}}
         showsVerticalScrollIndicator={false}>
         <View style={{}}>
-          {taskData.map((item, index) => {
-            return (
-              <TaskCard
-                title={item.title}
-                description={item.des}
-                status={item.status}
-              />
-            );
-          })}
+          {previewData &&
+            previewData.length > 0 &&
+            previewData.map((item, index) => {
+              return (
+                <TaskCard
+                  key={index}
+                  title={item.title}
+                  description={item.description}
+                  stat={item.stat}
+                  id={item.id}
+                  completePress={id => {
+                    onComplete(id);
+                  }}
+                  deletePress={id => {
+                    onDelete(id);
+                  }}
+                />
+              );
+            })}
         </View>
       </ScrollView>
     </View>
