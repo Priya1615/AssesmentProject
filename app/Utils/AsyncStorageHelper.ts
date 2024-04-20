@@ -17,3 +17,14 @@ export const storeData = async (key:string,value:object) => {
       // error reading value
     }
   };
+  export const clearAll = async () => {
+    try {
+      await AsyncStorage.clear()
+      return true
+    } catch(e) {
+      return false
+      // clear error
+    }
+  
+    console.log('Done.')
+  }

@@ -16,15 +16,15 @@ import {
 import {Colors} from '../Assets/Colors';
 import Assets from '../Assets';
 import {FontConstants} from '../Assets/FontConstants';
-import { getData } from '../../app/Utils/AsyncStorageHelper';
+import {clearAll, getData} from '../../app/Utils/AsyncStorageHelper';
 
 interface Props {
   navigation: any;
 }
-export interface User{
-  displayName:string,
-  email:string,
-  uid:string
+export interface User {
+  displayName: string;
+  email: string;
+  uid: string;
 }
 
 const SettingScreen: FC<Props> = props => {
@@ -32,20 +32,24 @@ const SettingScreen: FC<Props> = props => {
   const [name, setName] = useState('');
   const [password, setpassword] = useState('');
   const [secureText, setsecureText] = useState(true);
-  const [user, setUser] = useState<User>({ displayName: '', email: '', uid: '' });
+  const [user, setUser] = useState<User>({displayName: '', email: '', uid: ''});
 
-  const onSignUpPress=()=>{
-    props.navigation.navigate("Home")
- 
-   };
-   const getUser=async()=>{
-    const user:User= await getData('user');
-    console.log('user get',user)
-    setUser(user)
-   }
-   useEffect(()=>{
-     getUser()
-   },[])
+  const onLogoutPress = async () => {
+    await clearAll().then(resp => {
+       props.navigation.reset({
+            index: 0,
+            routes: [{ name: 'LoginScreen', params: { } }],
+          });
+    });
+  };
+  const getUser = async () => {
+    const user: User = await getData('user');
+    console.log('user get', user);
+    setUser(user);
+  };
+  useEffect(() => {
+    getUser();
+  }, []);
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -53,30 +57,38 @@ const SettingScreen: FC<Props> = props => {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
       <ScrollView contentContainerStyle={styles.parentViewContainer}>
         <View style={{flex: 3}}>
-          <View style={{backgroundColor:'red',height:100,width:100,borderRadius:50,alignSelf:"center"}}>
-
-          </View>
-          <Text style={styles.secoendaryLoginText}>{user.displayName?user.displayName:null}</Text>
+          <View
+            style={{
+              backgroundColor: 'red',
+              height: 100,
+              width: 100,
+              borderRadius: 50,
+              alignSelf: 'center',
+            }}></View>
+          <Text style={styles.secoendaryLoginText}>
+            {user.displayName ? user.displayName : null}
+          </Text>
         </View>
         <View style={{flex: 6}}>
           <Text style={styles.inputlevel}>Email</Text>
-          <View style={[styles.inputContainer, {marginBottom:12}]}>
-            <Text style={{fontFamily:FontConstants.Avenir500,fontSize:16}}>{user.email?user.email:''}</Text>
+          <View style={[styles.inputContainer, {marginBottom: 12}]}>
+            <Text style={{fontFamily: FontConstants.Avenir500, fontSize: 16}}>
+              {user.email ? user.email : ''}
+            </Text>
           </View>
           <Text style={[styles.inputlevel]}>Name</Text>
-          <View style={[styles.inputContainer,{marginBottom:12}]}>
- 
-            <Text style={{fontFamily:FontConstants.Avenir500,fontSize:16}}>{user.displayName?user.displayName:''}</Text>
-         
-            
+          <View style={[styles.inputContainer, {marginBottom: 12}]}>
+            <Text style={{fontFamily: FontConstants.Avenir500, fontSize: 16}}>
+              {user.displayName ? user.displayName : ''}
+            </Text>
           </View>
-          
         </View>
         <View style={{flex: 2}}>
-          <TouchableOpacity onPress={()=>onSignUpPress()} style={styles.buttonView}>
+          <TouchableOpacity
+            onPress={() => onLogoutPress()}
+            style={styles.buttonView}>
             <Text style={styles.buttonText}>Logout</Text>
           </TouchableOpacity>
-         
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -108,7 +120,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: FontConstants.Avenir500,
   },
-  forgetPasswordDiv: { alignSelf: 'flex-end'},
+  forgetPasswordDiv: {alignSelf: 'flex-end'},
   forgetPassText: {
     fontSize: 14,
     color: '#0178BD',
