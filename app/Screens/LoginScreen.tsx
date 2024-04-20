@@ -32,7 +32,6 @@ const LoginScreen: FC<Props> = props => {
   const loginPress = async () => {
     setLoading(true);
     const loginResponseFirebase: any = await handleLogin(email, password);
-    console.log('loginResponseFirebase',loginResponseFirebase)
     if (loginResponseFirebase.user) {
       let userCred= {
         email:loginResponseFirebase.user.email,
@@ -40,8 +39,7 @@ const LoginScreen: FC<Props> = props => {
         displayName:loginResponseFirebase.user.displayName
       }
       storeData('user',userCred)
-      console.log('cred',userCred)
-      props.navigation.navigate('Home');
+      props.navigation.navigate('Home', { screen: 'HomeScreen', params: { uid: userCred.uid } });
     } else if (loginResponseFirebase.err) {
       alert(loginResponseFirebase.err);
     }

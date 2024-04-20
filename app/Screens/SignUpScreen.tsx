@@ -50,7 +50,7 @@ const SignUpScreen: FC<Props> = props => {
     }
     console.log('dn',userCred)
     await storeData('user',userCred)
-    props.navigation.navigate('Home')
+    props.navigation.navigate('Home', { screen: 'HomeScreen', params: { uid: userCred.uid } });
    }
    else if(firebaseLoginResponse.err)
    {
