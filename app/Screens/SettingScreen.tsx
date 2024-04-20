@@ -58,13 +58,9 @@ const SettingScreen: FC<Props> = props => {
       <ScrollView contentContainerStyle={styles.parentViewContainer}>
         <View style={{flex: 3}}>
           <View
-            style={{
-              backgroundColor: 'red',
-              height: 100,
-              width: 100,
-              borderRadius: 50,
-              alignSelf: 'center',
-            }}></View>
+            style={styles.iconView}>
+              <Image style={styles.icon} source={Assets.UserProfile}/>
+            </View>
           <Text style={styles.secoendaryLoginText}>
             {user.displayName ? user.displayName : null}
           </Text>
@@ -161,6 +157,15 @@ const styles = StyleSheet.create({
     color: '#828282',
     fontFamily: FontConstants.Avenir400,
   },
+  iconView:{
+    height: 100,
+    width: 100,
+    borderRadius: 50,
+    alignSelf: 'center',
+  },
+  icon:{height: 100,
+    width: 100,
+    borderRadius: 50,}
 });
 
 export default SettingScreen;
