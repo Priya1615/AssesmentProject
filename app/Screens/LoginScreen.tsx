@@ -18,7 +18,7 @@ import {Colors} from '../Assets/Colors';
 import Assets from '../Assets';
 import {FontConstants} from '../Assets/FontConstants';
 import {handleLogin} from '../../app/Utils/FirebaseHelper';
-import { storeData } from '../../app/Utils/AsyncStorageHelper';
+import {storeData} from '../../app/Utils/AsyncStorageHelper';
 
 interface Props {
   navigation: any;
@@ -33,13 +33,16 @@ const LoginScreen: FC<Props> = props => {
     setLoading(true);
     const loginResponseFirebase: any = await handleLogin(email, password);
     if (loginResponseFirebase.user) {
-      let userCred= {
-        email:loginResponseFirebase.user.email,
-        uid:loginResponseFirebase.user.uid,
-        displayName:loginResponseFirebase.user.displayName
-      }
-      storeData('user',userCred)
-      props.navigation.navigate('Home', { screen: 'HomeScreen', params: { uid: userCred.uid } });
+      let userCred = {
+        email: loginResponseFirebase.user.email,
+        uid: loginResponseFirebase.user.uid,
+        displayName: loginResponseFirebase.user.displayName,
+      };
+      storeData('user', userCred);
+      props.navigation.navigate('Home', {
+        screen: 'HomeScreen',
+        params: {uid: userCred.uid},
+      });
     } else if (loginResponseFirebase.err) {
       alert(loginResponseFirebase.err);
     }
@@ -89,11 +92,6 @@ const LoginScreen: FC<Props> = props => {
               />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            onPress={() => props.navigation.navigate('ForgetPassScreen')}
-            style={styles.forgetPasswordDiv}>
-            <Text style={styles.forgetPassText}>ForgetPassword?</Text>
-          </TouchableOpacity>
         </View>
         <View style={{flex: 2}}>
           <TouchableOpacity
@@ -101,7 +99,11 @@ const LoginScreen: FC<Props> = props => {
               loginPress();
             }}
             style={styles.buttonView}>
-            {loading?<ActivityIndicator size={'small'} color={'#FFF'} />: <Text style={styles.buttonText}>Login</Text>}
+            {loading ? (
+              <ActivityIndicator size={'small'} color={'#FFF'} />
+            ) : (
+              <Text style={styles.buttonText}>Login</Text>
+            )}
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => props.navigation.navigate('SignUpScreen')}
