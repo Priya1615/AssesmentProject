@@ -140,7 +140,7 @@ const TaskScreen: FC<Props> = props => {
         showsVerticalScrollIndicator={false}>
         <View style={{}}>
           {previewData &&
-            previewData.length > 0 &&
+            previewData.length > 0?
             previewData.map((item, index) => {
               return (
                 <TaskCard
@@ -149,6 +149,7 @@ const TaskScreen: FC<Props> = props => {
                   description={item.description}
                   stat={item.stat}
                   id={item.id}
+                  pageFrom={"Task"}
                   completePress={id => {
                     onComplete(id);
                   }}
@@ -157,7 +158,11 @@ const TaskScreen: FC<Props> = props => {
                   }}
                 />
               );
-            })}
+            }):<View style={{alignItems:'center',justifyContent:'center'}}>
+<Text>No Data Found</Text>
+              </View>
+              
+              }
         </View>
       </ScrollView>
     </View>

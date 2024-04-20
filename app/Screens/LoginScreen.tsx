@@ -13,6 +13,7 @@ import {
   Platform,
   ActivityIndicatorBase,
   ActivityIndicator,
+  Alert
 } from 'react-native';
 import {Colors} from '../Assets/Colors';
 import Assets from '../Assets';
@@ -29,6 +30,7 @@ const LoginScreen: FC<Props> = props => {
   const [password, setpassword] = useState('');
   const [secureText, setsecureText] = useState(true);
   const [loading, setLoading] = useState(false);
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const loginPress = async () => {
     setLoading(true);
     const loginResponseFirebase: any = await handleLogin(email, password);
@@ -95,9 +97,15 @@ const LoginScreen: FC<Props> = props => {
         </View>
         <View style={{flex: 2}}>
           <TouchableOpacity
-            onPress={() => {
+           onPress={() => {
+            if (email === "" || password === "") {
+              Alert.alert("Please fill up all the information.");
+            } else if (!emailPattern.test(email)) {
+              Alert.alert("Please provide a valid email.");
+            } else {
               loginPress();
-            }}
+            }
+          }}
             style={styles.buttonView}>
             {loading ? (
               <ActivityIndicator size={'small'} color={'#FFF'} />

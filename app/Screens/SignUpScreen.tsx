@@ -30,13 +30,16 @@ const SignUpScreen: FC<Props> = props => {
   const [password, setpassword] = useState('');
   const [secureText, setsecureText] = useState(true);
   const [loading,setLoading]=useState(false)
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const onSignUpPress=()=>{
-   email=="" || name=="" || password == ""?
-   Alert.alert("Please Fill up all the information field to continue the proccess"):
-   signUpAction()
-   //props.navigation.navigate("OtpScreen")
-
+   if (  email=="" || name=="" || password == "") {
+    Alert.alert("Please Fill up all the information field to continue the proccess");
+  } else if (!emailPattern.test(email)) {
+    Alert.alert("Please provide a valid email.");
+  } else {
+    signUpAction();
+  }
   };
  const signUpAction=async()=>{
    setLoading(true);

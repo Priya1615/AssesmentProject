@@ -62,7 +62,7 @@ const HomeScreen: FC<Props> = (props:any) => {
         style={{width: '100%', marginTop: 20}}
         showsVerticalScrollIndicator={false}>
         <View style={{padding: 10}}>
-          {taskData.length>0&& taskData.map((item, index) => {
+          {taskData.length>0? taskData.map((item, index) => {
             return (
               <TaskCard
               key={index}
@@ -73,7 +73,9 @@ const HomeScreen: FC<Props> = (props:any) => {
                 pageFrom={"Home"}
               />
             );
-          })}
+          }):<View style={{alignItems:'center',justifyContent:'center'}}>
+          <Text>No Data Found</Text>
+                        </View> }
         </View>
       </ScrollView>
     </View>
