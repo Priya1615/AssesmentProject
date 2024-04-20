@@ -11,28 +11,54 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  Alert
+  Alert,
+  ActivityIndicator
 } from 'react-native';
 import {Colors} from '../Assets/Colors';
 import Assets from '../Assets';
 import {FontConstants} from '../Assets/FontConstants';
+import { handleSignUp } from '../../app/Utils/FirebaseHelper';
+import { storeData } from '../../app/Utils/AsyncStorageHelper';
 
 interface Props {
   navigation: any;
 }
 
 const SignUpScreen: FC<Props> = props => {
-  const [phoneNumber, setphoneNumber] = useState('');
+  const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setpassword] = useState('');
   const [secureText, setsecureText] = useState(true);
+  const [loading,setLoading]=useState(false)
 
   const onSignUpPress=()=>{
-   phoneNumber=="" || name=="" || password == ""?
+   email=="" || name=="" || password == ""?
    Alert.alert("Please Fill up all the information field to continue the proccess"):
-   props.navigation.navigate("OtpScreen")
+   signUpAction()
+   //props.navigation.navigate("OtpScreen")
 
   };
+ const signUpAction=async()=>{
+   setLoading(true);
+   const firebaseLoginResponse:any=await handleSignUp(name,email,password)
+   console.log('response from fb',firebaseLoginResponse)
+  if( firebaseLoginResponse.user){
+    let userCred= {
+      email:firebaseLoginResponse.user.email,
+      uid:firebaseLoginResponse.user.uid,
+      displayName:name
+    }
+    console.log('dn',userCred)
+    await storeData('user',userCred)
+    props.navigation.navigate('Home')
+   }
+   else if(firebaseLoginResponse.err)
+   {
+     alert(firebaseLoginResponse.err)
+   }
+   setLoading(false);
+
+ }
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -56,16 +82,16 @@ const SignUpScreen: FC<Props> = props => {
               keyboardType={'default'}
             />
           </View>
-          <Text style={styles.inputlevel}>Phone Number</Text>
+          <Text style={styles.inputlevel}>Email</Text>
           <View style={[styles.inputContainer, {marginBottom:12}]}>
             <TextInput
            
-              placeholder={'Enter your registered number'}
+              placeholder={'Enter your email'}
               placeholderTextColor={'#6E6E6E'}
               returnKeyType="next"
-              value={phoneNumber}
-              onChangeText={value => setphoneNumber(value)}
-              keyboardType={'phone-pad'}
+              value={email}
+              onChangeText={value => setEmail(value)}
+              keyboardType={'default'}
             />
           </View>
           <Text style={[styles.inputlevel]}>Password</Text>
@@ -94,7 +120,7 @@ const SignUpScreen: FC<Props> = props => {
         </View>
         <View style={{flex: 2}}>
           <TouchableOpacity onPress={()=>onSignUpPress()} style={styles.buttonView}>
-            <Text style={styles.buttonText}>Sign Up</Text>
+           {loading?<ActivityIndicator size={'small'} color={'#FFF'}/>: <Text style={styles.buttonText}>Sign Up</Text>}
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>props.navigation.navigate("LoginScreen")} style={styles.haveAccountView}>
             <Text style={styles.haveAccountText}>

@@ -11,19 +11,42 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicatorBase,
+  ActivityIndicator,
 } from 'react-native';
 import {Colors} from '../Assets/Colors';
 import Assets from '../Assets';
 import {FontConstants} from '../Assets/FontConstants';
+import {handleLogin} from '../../app/Utils/FirebaseHelper';
+import { storeData } from '../../app/Utils/AsyncStorageHelper';
 
 interface Props {
   navigation: any;
 }
 
 const LoginScreen: FC<Props> = props => {
-  const [phoneNumber, setphoneNumber] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setpassword] = useState('');
   const [secureText, setsecureText] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const loginPress = async () => {
+    setLoading(true);
+    const loginResponseFirebase: any = await handleLogin(email, password);
+    console.log('loginResponseFirebase',loginResponseFirebase)
+    if (loginResponseFirebase.user) {
+      let userCred= {
+        email:loginResponseFirebase.user.email,
+        uid:loginResponseFirebase.user.uid,
+        displayName:loginResponseFirebase.user.displayName
+      }
+      storeData('user',userCred)
+      console.log('cred',userCred)
+      props.navigation.navigate('Home');
+    } else if (loginResponseFirebase.err) {
+      alert(loginResponseFirebase.err);
+    }
+    setLoading(false);
+  };
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -35,22 +58,21 @@ const LoginScreen: FC<Props> = props => {
           <Text style={styles.secoendaryLoginText}>Login to your account</Text>
         </View>
         <View style={{flex: 6}}>
-          <Text style={styles.inputlevel}>Phone Number</Text>
+          <Text style={styles.inputlevel}>Email</Text>
           <View style={[styles.inputContainer, {}]}>
             <TextInput
-           
-              placeholder={'Enter your registered number'}
+              placeholder={'Enter your registered email'}
               placeholderTextColor={'#6E6E6E'}
               returnKeyType="next"
-              value={phoneNumber}
-              onChangeText={value => setphoneNumber(value)}
+              value={email}
+              onChangeText={value => setEmail(value)}
               keyboardType={'phone-pad'}
             />
           </View>
           <Text style={[styles.inputlevel, {marginTop: 25}]}>Password</Text>
           <View style={styles.inputContainer}>
             <TextInput
-              style={{width:'90%'}}
+              style={{width: '90%'}}
               placeholder={'Enter your password'}
               placeholderTextColor={'#6E6E6E'}
               returnKeyType="done"
@@ -58,7 +80,7 @@ const LoginScreen: FC<Props> = props => {
               secureTextEntry={secureText}
               onChangeText={value => setpassword(value)}
             />
-            <TouchableOpacity  onPress={() => setsecureText(!secureText)}>
+            <TouchableOpacity onPress={() => setsecureText(!secureText)}>
               <Image
                 source={secureText ? Assets.img_hideeye : Assets.Eye}
                 style={{
@@ -69,15 +91,23 @@ const LoginScreen: FC<Props> = props => {
               />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={()=>props.navigation.navigate("ForgetPassScreen")} style={styles.forgetPasswordDiv}>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate('ForgetPassScreen')}
+            style={styles.forgetPasswordDiv}>
             <Text style={styles.forgetPassText}>ForgetPassword?</Text>
           </TouchableOpacity>
         </View>
         <View style={{flex: 2}}>
-          <TouchableOpacity onPress={()=>props.navigation.navigate("Home")} style={styles.buttonView}>
-            <Text style={styles.buttonText}>Login</Text>
+          <TouchableOpacity
+            onPress={() => {
+              loginPress();
+            }}
+            style={styles.buttonView}>
+            {loading?<ActivityIndicator size={'small'} color={'#FFF'} />: <Text style={styles.buttonText}>Login</Text>}
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>props.navigation.navigate("SignUpScreen")} style={styles.haveAccountView}>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate('SignUpScreen')}
+            style={styles.haveAccountView}>
             <Text style={styles.haveAccountText}>
               Don’t have an account?{' '}
               <Text style={{color: '#0178BD'}}>Sign Up</Text>
