@@ -19,6 +19,7 @@ export interface TaskData {
   description: string;
   stat: string;
   id: string;
+  pageFrom:string,
   completePress?: (uis: string) => void;
   deletePress?: (uis: string) => void;
 }
@@ -72,6 +73,7 @@ const TaskCard = ({
   title,
   description,
   stat,
+  pageFrom,
   completePress,
   deletePress,
   id,
@@ -95,12 +97,12 @@ const TaskCard = ({
       <View style={styles.deleteDiv}>
         <TouchableOpacity
           onPress={() => (completePress ? completePress(id) : null)}
-          style={[styles.completedDiv,{display:stat=='Due'?'flex':'none'}]}>
+          style={[styles.completedDiv,{display:pageFrom == "Home"?"none":stat=='Due'?'flex':'none'}]}>
           <Text style={styles.completedTask}>Complete</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => (deletePress ? deletePress(id) : null)}
-          style={styles.deleteButton}>
+          style={[styles.deleteButton,{display:pageFrom == "Home"?"none":'flex'}]}>
           <Image style={{tintColor: 'red'}} source={Assets.delete} />
         </TouchableOpacity>
       </View>

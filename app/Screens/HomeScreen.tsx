@@ -44,7 +44,7 @@ const HomeScreen: FC<Props> = (props:any) => {
                 description={item.description}
                 stat={item.stat}
                 id={item.id}
-                
+                pageFrom={"Home"}
               />
             );
           })}
