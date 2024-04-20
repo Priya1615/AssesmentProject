@@ -17,12 +17,13 @@ import {FontConstants} from '../Assets/FontConstants';
 interface props {
   color: string;
   title: string;
-  value: string;
-  colorbackground:string
+  value: number;
+  colorbackground:string,
+  onPress:()=>void
 }
 
 
-const SummaryCard = ({color, title, value,colorbackground}: props) => {
+const SummaryCard = ({color, title, value,colorbackground,onPress}: props) => {
     const styles = StyleSheet.create({
         cardView: {
           height: 60,
@@ -37,7 +38,7 @@ const SummaryCard = ({color, title, value,colorbackground}: props) => {
         },
         basicText:{fontFamily:FontConstants.Avenir600,fontSize:16,color:color}
       });
-  return (<TouchableOpacity style={styles.cardView}>
+  return (<TouchableOpacity onPress={()=>{onPress()}} style={styles.cardView}>
       <Text style={styles.basicText}>{title +'('+value+')'}</Text>
 
   </TouchableOpacity>
