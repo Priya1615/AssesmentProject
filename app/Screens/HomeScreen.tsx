@@ -1,5 +1,5 @@
 import {FontConstants} from '../Assets/FontConstants';
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,26 +9,26 @@ import {
   StyleSheet,
 } from 'react-native';
 import TaskCard from '../Components/TaskCard';
-
+import { loadTodos } from '../../app/Utils/FirebaseHelper';
+import {TaskData} from '../Components/TaskCard'
+import { useFocusEffect } from '@react-navigation/native';
+import { DrawerActions } from '@react-navigation/native';
 interface Props {}
 
-const HomeScreen: FC<Props> = ({}) => {
-  const taskData = [
-    {
-      title: 'Document Signing',
-      id: '1',
-      des: 'Document signing with Jhon Doe',
-      status: 'Completed',
-    },
-    {
-      title: 'Document Signing',
-      id: '2',
-      des: 'Document signing with Jhon Doe',
-      status: 'Due',
-    },
+const HomeScreen: FC<Props> = (props:any) => {
+   const uid=props.route.params.uid
+  console.log('props',props.route)
+  const [taskData,setTaskData]=useState<TaskData[]>([])
+  useFocusEffect(
+    React.useCallback(() => {
+      loadAllToDo()
+    }, [])
+  );
 
- 
-  ];
+  const loadAllToDo=async()=>{
+  const todoList:TaskData[]= await loadTodos(uid);
+  setTaskData(todoList)
+  }
   return (
     <View
       style={styles.mainView}>
@@ -36,12 +36,15 @@ const HomeScreen: FC<Props> = ({}) => {
         style={{width: '100%', marginTop: 20}}
         showsVerticalScrollIndicator={false}>
         <View style={{padding: 10}}>
-          {taskData.map((item, index) => {
+          {taskData.length>0&& taskData.map((item, index) => {
             return (
               <TaskCard
+              key={index}
                 title={item.title}
-                description={item.des}
-                status={item.status}
+                description={item.description}
+                stat={item.stat}
+                id={item.id}
+                
               />
             );
           })}
