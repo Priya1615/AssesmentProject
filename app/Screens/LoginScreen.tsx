@@ -69,7 +69,7 @@ const LoginScreen: FC<Props> = props => {
               returnKeyType="next"
               value={email}
               onChangeText={value => setEmail(value)}
-              keyboardType={'phone-pad'}
+              keyboardType={'default'}
             />
           </View>
           <Text style={[styles.inputlevel, {marginTop: 25}]}>Password</Text>
