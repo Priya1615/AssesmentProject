@@ -38,7 +38,7 @@ const HomeScreen: FC<Props> = (props:any) => {
           <TouchableOpacity onPress={() => setTipView(prev=>!prev)}>
             <Image
               source={Assets.UserProfile}
-              style={{ width: 40, height: 40, borderRadius:20,marginRight:10 }}
+              style={{ width: 30, height: 30, borderRadius:15,marginRight:10 }}
             />
           </TouchableOpacity>
         ),
