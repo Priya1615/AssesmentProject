@@ -12,7 +12,7 @@ import {
 import TaskCard from '../Components/TaskCard';
 import { loadTodos } from '../../app/Utils/FirebaseHelper';
 import {TaskData} from '../Components/TaskCard'
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect,useIsFocused } from '@react-navigation/native';
 import ToolTip from '../Components/ToolTip'
 import Assets from '../Assets';
 import LottieView from 'lottie-react-native';
@@ -24,12 +24,18 @@ const HomeScreen: FC<Props> = (props:any) => {
    const uid=props.route.params.uid
   const [tipView,setTipView]=useState(false)
   const [taskData,setTaskData]=useState<TaskData[]>([])
+  const isFocused = useIsFocused();
 
   useFocusEffect(
     React.useCallback(() => {
       loadAllToDo()
     }, [])
-  );
+  );useEffect(() => {
+    if (!isFocused) {
+      setTipView(false);
+    }
+  }, [isFocused]);
+
   useEffect(()=>{
     props.navigation.setOptions(
       {
