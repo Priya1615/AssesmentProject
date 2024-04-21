@@ -195,7 +195,6 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
     marginLeft: 10,
   },
   addTaskView: {
