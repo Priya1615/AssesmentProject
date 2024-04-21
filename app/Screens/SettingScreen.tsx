@@ -51,6 +51,15 @@ const SettingScreen: FC<Props> = props => {
     setUser(user);
   };
   useEffect(() => {
+    props.navigation.setOptions(
+      {
+        title: 'Settings',
+        headerStyle: {
+          backgroundColor:Colors.primary,
+        },
+        headerTintColor: '#fff',
+      }
+    )
     getUser();
   }, []);
   return (

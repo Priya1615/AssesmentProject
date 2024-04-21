@@ -49,6 +49,15 @@ const TaskScreen: FC<Props> = props => {
       ? taskData.filter(item => item.stat == 'Complete')
       : [];
   useEffect(() => {
+    props.navigation.setOptions(
+      {
+        title: 'Tasks',
+        headerStyle: {
+          backgroundColor:Colors.primary,
+        },
+        headerTintColor: '#fff',
+      }
+    )
     getUser();
   }, []);
   useFocusEffect(
