@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 import TaskCard from '../Components/TaskCard';
 import { loadTodos } from '../../app/Utils/FirebaseHelper';
@@ -14,6 +15,9 @@ import {TaskData} from '../Components/TaskCard'
 import { useFocusEffect } from '@react-navigation/native';
 import ToolTip from '../Components/ToolTip'
 import Assets from '../Assets';
+import LottieView from 'lottie-react-native';
+import NoDataView from '../Components/NoDataView'
+
 interface Props {}
 
 const HomeScreen: FC<Props> = (props:any) => {
@@ -73,9 +77,7 @@ const HomeScreen: FC<Props> = (props:any) => {
                 pageFrom={"Home"}
               />
             );
-          }):<View style={{alignItems:'center',justifyContent:'center'}}>
-          <Text>No Data Found</Text>
-                        </View> }
+          }):<NoDataView/> }
         </View>
       </ScrollView>
     </View>

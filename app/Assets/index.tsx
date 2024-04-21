@@ -7,6 +7,7 @@ const Assets = {
   delete:require('./Images/delete_gray.png'),
   cross:require('./Images/cross.png'),
   UserProfile:require('./Images/UserProfile.png'),
+  lotti:require('./Images/lotti.json'),
   
 };
 

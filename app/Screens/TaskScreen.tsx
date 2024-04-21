@@ -27,6 +27,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {User} from './SettingScreen';
 import {getData} from '../../app/Utils/AsyncStorageHelper';
 import ModalView from '../Components/ModalView';
+import NoDataView from '../Components/NoDataView'
 
 interface Props {
   navigation: any;
@@ -158,9 +159,7 @@ const TaskScreen: FC<Props> = props => {
                   }}
                 />
               );
-            }):<View style={{alignItems:'center',justifyContent:'center'}}>
-<Text>No Data Found</Text>
-              </View>
+            }):<NoDataView/>
               
               }
         </View>
