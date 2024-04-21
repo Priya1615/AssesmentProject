@@ -193,7 +193,6 @@ const styles = StyleSheet.create({
   },
   summaryDiv: {
     width: '100%',
-    height: 80,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
