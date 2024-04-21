@@ -11,6 +11,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Alert
 } from 'react-native';
 import {Colors} from '../Assets/Colors';
 import Assets from '../Assets';
@@ -101,7 +102,12 @@ const TaskScreen: FC<Props> = props => {
             setDescription(t);
           }}
           addTask={() => {
-            addToDo();
+            if (title === "") {
+              Alert.alert("Please set a Title of the task");
+            }  else {
+              addToDo();
+            }
+           
           }}
           setShowmodal={(b: boolean) => setShowmodal(b)}
         />
