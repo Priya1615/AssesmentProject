@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: FontConstants.Avenir500,
   },
-  forgetPasswordDiv: { alignSelf: 'flex-end'},
+  forgetPasswordDiv: {alignSelf: 'flex-end'},
   forgetPassText: {
     fontSize: 14,
     color: '#0178BD',
@@ -173,6 +173,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 9,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
   },
   buttonText: {
     color: Colors.white,

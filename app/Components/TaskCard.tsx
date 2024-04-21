@@ -33,6 +33,13 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 20,
     elevation: 9,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
     borderWidth: 0.5,
     borderColor: '#0178BD',
   },
@@ -60,7 +67,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  deleteDiv: {height: '100%', width: '20%',},
+  deleteDiv: {height: '100%', width: '20%'},
   completedTask: {
     fontSize: 12,
     fontFamily: FontConstants.Avenir400,

@@ -91,7 +91,7 @@ const HomeScreen: FC<Props> = (props:any) => {
 };
 
 const styles = StyleSheet.create({
-  mainView:{
+  mainView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -135,6 +135,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 9,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
   },
   buttonText: {
     color: '#fff',

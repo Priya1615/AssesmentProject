@@ -145,6 +145,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 9,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
   },
   buttonText: {
     color: Colors.white,
@@ -172,15 +179,13 @@ const styles = StyleSheet.create({
     color: '#828282',
     fontFamily: FontConstants.Avenir400,
   },
-  iconView:{
+  iconView: {
     height: 100,
     width: 100,
     borderRadius: 50,
     alignSelf: 'center',
   },
-  icon:{height: 100,
-    width: 100,
-    borderRadius: 50,}
+  icon: {height: 100, width: 100, borderRadius: 50},
 });
 
 export default SettingScreen;
